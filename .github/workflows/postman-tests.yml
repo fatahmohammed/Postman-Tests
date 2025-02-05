@@ -13,9 +13,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Install Newman
-        run: npm install -g newman
-
+      - name: Install Newman and Reporter
+        run: npm install -g newman newman-reporter-htmlextra
+        
       - name: Run Postman tests
         run: newman run postman_collection.json --reporters cli,junit --reporter-junit-export results.xml
 
@@ -26,8 +26,14 @@ jobs:
           server_port: ${{ secrets.SMTP_PORT }}
           username: ${{ secrets.SMTP_USER }}
           password: ${{ secrets.SMTP_PASSWORD }}
-          subject: "Résultats des tests Postman"
-          body: "Les tests Postman ont été exécutés. Voir les résultats en pièce jointe."
+          subject: "🚀 Résultats des tests Postman"
+          body: "Les tests Postman ont été exécutés avec succès. Vous trouverez ci-joint le rapport HTML."
           to: ${{ secrets.RECIPIENT_EMAIL }}
           from: "CI/CD GitHub Actions"
-          attachments: "results.xml"
+          attachments: "report.html"
+
+      - name: Upload test report
+        uses: actions/upload-artifact@v3
+        with:
+          name: postman-test-report
+          path: report.html
