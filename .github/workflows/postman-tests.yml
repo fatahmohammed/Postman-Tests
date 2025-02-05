@@ -19,7 +19,7 @@ jobs:
       - name: Run Postman tests
         run: newman run postman_collection.json --reporters cli,junit --reporter-junit-export results.xml
 
-         - name: Send email notification
+      - name: Send email notification
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: ${{ secrets.SMTP_SERVER }}
