@@ -1,0 +1,23 @@
+name: Run Postman Tests
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"  # Exécute toutes les 10 minutes
+  workflow_dispatch:  # Permet aussi de l’exécuter manuellement si besoin
+
+
+
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install Newman
+        run: npm install -g newman
+
+      - name: Run Postman tests
+        run: newman run postman_collection.json --reporters cli,junit --reporter-junit-export results.xml
