@@ -19,6 +19,15 @@ jobs:
       - name: Run Postman tests
         run: newman run postman_collection.json --reporters cli,junit --reporter-junit-export results.xml
 
+      - name: Check if report exists
+        run: ls -lah
+
+      - name: Upload test report
+        uses: actions/upload-artifact@v3
+        with:
+          name: postman-test-report
+          path: report.html
+
       - name: Send email notification
         uses: dawidd6/action-send-mail@v3
         with:
@@ -27,7 +36,6 @@ jobs:
           username: ${{ secrets.SMTP_USER }}
           password: ${{ secrets.SMTP_PASSWORD }}
           subject: "🚀 Résultats des tests Postman"
-          body: "Les tests Postman ont été exécutés avec succès. Vous trouverez ci-joint le rapport HTML."
+          body: "Les tests Postman ont été exécutés. 📄 Téléchargez le rapport HTML ici : [GitHub Artifacts](https://github.com/ton-repo/actions/runs/)"
           to: ${{ secrets.RECIPIENT_EMAIL }}
           from: "CI/CD GitHub Actions"
-          attachments: "report.html"
