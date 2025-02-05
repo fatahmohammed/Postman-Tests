@@ -3,7 +3,7 @@ name: Run Postman Tests
 on:
   schedule:
     - cron: "*/10 * * * *"  # Exécute toutes les 10 minutes
-  workflow_dispatch:  # Permet l'exécution manuelle
+#  workflow_dispatch:  # Permet l'exécution manuelle
 
 jobs:
   test:
