@@ -3,10 +3,7 @@ name: Run Postman Tests
 on:
   schedule:
     - cron: "*/10 * * * *"  # Exécute toutes les 10 minutes
-  workflow_dispatch:  # Permet aussi de l’exécuter manuellement si besoin
-
-
-
+  workflow_dispatch:  # Permet de l'exécuter manuellement
 
 jobs:
   test:
@@ -21,3 +18,16 @@ jobs:
 
       - name: Run Postman tests
         run: newman run postman_collection.json --reporters cli,junit --reporter-junit-export results.xml
+
+         - name: Send email notification
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{ secrets.SMTP_SERVER }}
+          server_port: ${{ secrets.SMTP_PORT }}
+          username: ${{ secrets.SMTP_USER }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          subject: "Résultats des tests Postman"
+          body: "Les tests Postman ont été exécutés. Voir les résultats en pièce jointe."
+          to: ${{ secrets.RECIPIENT_EMAIL }}
+          from: "CI/CD GitHub Actions"
+          attachments: "results.xml"
