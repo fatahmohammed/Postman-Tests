@@ -1,42 +1,42 @@
-name: Run Postman Tests
+# name: Run Postman Tests
 
-on:
-  schedule:
-    - cron: "*/10 * * * *"  # Exécute toutes les 10 minutes
-#  workflow_dispatch:  # Permet l'exécution manuelle
+# on:
+#   schedule:
+#     - cron: "*/10 * * * *"  # Exécute toutes les 10 minutes
+# #  workflow_dispatch:  # Permet l'exécution manuelle
 
-jobs:
-  test:
-    runs-on: ubuntu-latest
+# jobs:
+#   test:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4  # ✅ Version mise à jour
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v4  # ✅ Version mise à jour
 
-      - name: Install Newman and Reporter
-        run: npm install -g newman newman-reporter-htmlextra
+#       - name: Install Newman and Reporter
+#         run: npm install -g newman newman-reporter-htmlextra
 
-      - name: Run Postman tests
-        run: newman run postman_collection.json --reporters cli,htmlextra --reporter-htmlextra-export report.html
+#       - name: Run Postman tests
+#         run: newman run postman_collection.json --reporters cli,htmlextra --reporter-htmlextra-export report.html
 
-      - name: Check if report exists
-        run: ls -lah  # ✅ Vérifier si report.html est bien généré
+#       - name: Check if report exists
+#         run: ls -lah  # ✅ Vérifier si report.html est bien généré
 
-      - name: Upload test report
-        uses: actions/upload-artifact@v4  # ✅ Version mise à jour
-        with:
-          name: postman-test-report
-          path: report.html  # ✅ Assurez-vous que report.html est bien présent
+#       - name: Upload test report
+#         uses: actions/upload-artifact@v4  # ✅ Version mise à jour
+#         with:
+#           name: postman-test-report
+#           path: report.html  # ✅ Assurez-vous que report.html est bien présent
 
-      - name: Send email notification
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: ${{ secrets.SMTP_SERVER }}
-          server_port: ${{ secrets.SMTP_PORT }}
-          username: ${{ secrets.SMTP_USER }}
-          password: ${{ secrets.SMTP_PASSWORD }}
-          subject: "🚀 Résultats des tests Postman"
-          body: "Les tests Postman ont été exécutés. 📄 Téléchargez le rapport HTML ici : [GitHub Artifacts](https://github.com/ton-repo/actions/runs/)"
-          to: ${{ secrets.RECIPIENT_EMAIL }}
-          from: "CI/CD GitHub Actions"
-          attachments: "report.html"  # ✅ Ajout de l'attachement
+#       - name: Send email notification
+#         uses: dawidd6/action-send-mail@v3
+#         with:
+#           server_address: ${{ secrets.SMTP_SERVER }}
+#           server_port: ${{ secrets.SMTP_PORT }}
+#           username: ${{ secrets.SMTP_USER }}
+#           password: ${{ secrets.SMTP_PASSWORD }}
+#           subject: "🚀 Résultats des tests Postman"
+#           body: "Les tests Postman ont été exécutés. 📄 Téléchargez le rapport HTML ici : [GitHub Artifacts](https://github.com/ton-repo/actions/runs/)"
+#           to: ${{ secrets.RECIPIENT_EMAIL }}
+#           from: "CI/CD GitHub Actions"
+#           attachments: "report.html"  # ✅ Ajout de l'attachement
